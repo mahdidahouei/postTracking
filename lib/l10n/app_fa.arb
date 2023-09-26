@@ -1,5 +1,4 @@
 {
-    "helloWorld": "سلام جهان",
     "postalId": "بارکد پستی",
     "inquiry": "استعلام",
     "enterPostalId": "لطفا بارکد پستی را وارد کنید",
@@ -18,5 +17,11 @@
     "moreInfo": "اطلاعات بیشتر",
     "back": "برگشت",
     "trackingPostalGoods": "رهگیری مرسوله‌های پستی",
-    "recentTracking": "استعلام‌های اخیر"
+    "recentTracking": "استعلام‌های اخیر",
+    "errorOccurred": "متاسفانه خطایی رخ داده!",
+    "designedWithLove": "Designed with love.",
+    "connectIranianIP": "اتصال با ip ایران",
+    "ipDescription": "لطفا برای اینکه سامانه پست درست کار کند VPN خود را خاموش کنید :)",
+    "turnedOff": "خاموش کردم",
+    "settings": "تنظیمات"
 }

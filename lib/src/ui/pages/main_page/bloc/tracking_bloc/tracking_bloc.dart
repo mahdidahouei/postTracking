@@ -27,6 +27,13 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
           _requiredDataCompleter = Completer<RequiredData>();
         }
         await _tryGetRequiredData(emit);
+      } else if (event is GetRequiredDataWithLoading) {
+        if (_requiredDataCompleter == null ||
+            _requiredDataCompleter!.isCompleted) {
+          _requiredDataCompleter = Completer<RequiredData>();
+        }
+        emit(LoadingIp());
+        await _tryGetRequiredData(emit);
       } else if (event is TrackPostalId) {
         await _tryTrackPostalId(event, emit);
       }
@@ -39,10 +46,16 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
 
   Future<void> _tryGetRequiredData(Emitter<TrackingState> emit) async {
     try {
-      debugPrint("Get required data");
-      final requiredData = await _remoteDataSource.fetchWebsiteData();
-      debugPrint("Got required data");
-      _requiredDataCompleter?.complete(requiredData);
+      debugPrint("check IP");
+      final isIranianIP = await _remoteDataSource.isIranianIP();
+      if (isIranianIP) {
+        emit(LoadingRequiredData());
+        final requiredData = await _remoteDataSource.fetchWebsiteData();
+        debugPrint("Got required data");
+        _requiredDataCompleter?.complete(requiredData);
+      } else {
+        emit(ForeignIP());
+      }
     } on DioException catch (error) {
       retry();
       if (error.error is SocketException) {

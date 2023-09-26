@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:post_tracking/src/device/platform_channel.dart';
 import 'package:post_tracking/src/ui/global/animations/animated_size_opacity.dart';
 import 'package:post_tracking/src/ui/global/animations/my_animated_opacity.dart';
 import 'package:post_tracking/src/ui/global/utils/constants.dart';
+import 'package:post_tracking/src/ui/global/utils/loading_indicator.dart';
+import 'package:post_tracking/src/ui/global/widgets/my_dialog_box.dart';
 import 'package:post_tracking/src/ui/pages/main_page/bloc/tracking_bloc/tracking_bloc.dart';
 
 import '../../../../data/models/tracking_data.dart';
@@ -81,8 +84,12 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
   void _onDetached() => debugPrint('detached');
 
   void _onResumed() {
-    debugPrint('resumed');
+    Navigator.of(context)
+        .popUntil((route) => route.settings.name != _ipDialogRouteName);
+
     _setTrackingNumberFromClipBoard();
+
+    _checkIp();
   }
 
   void _onInactive() => debugPrint('inactive');
@@ -106,11 +113,18 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
     return null;
   }
 
+  void _checkIp() {
+    BlocProvider.of<TrackingBloc>(context).add(GetRequiredDataWithLoading());
+  }
+
+  static const _ipDialogRouteName = "ip-dialog";
+
   @override
   Widget build(BuildContext context) {
     final trackingStorageBloc = BlocProvider.of<TrackingStorageBloc>(context);
     final localizations = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
+    final trackingBloc = BlocProvider.of<TrackingBloc>(context);
 
     return BlocBuilder<TrackingStorageBloc, TrackingStorageState>(
       bloc: trackingStorageBloc,
@@ -127,7 +141,14 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
         // _handleListLength(state.allTrackingData);
         if (storageState.state == LocalBlocState.loaded) {
           return BlocConsumer<TrackingBloc, TrackingState>(
+            bloc: trackingBloc,
             listener: (context, state) {
+              if (state is LoadingIp) {
+                showLoadingIndicator(context);
+              } else {
+                hideLoadingIndicator(context);
+              }
+
               if (state is TrackingCompleted) {
                 BlocProvider.of<TrackingStorageBloc>(context).add(
                   SaveTrackingData(
@@ -140,6 +161,31 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
                 if (state.result.trackingNumber == _clipBoardTrackingNumber) {
                   _clipBoardTrackingName = state.result.trackingFullName;
                 }
+              } else if (state is ForeignIP) {
+                showDialog(
+                    context: context,
+                    routeSettings: RouteSettings(
+                      name: _ipDialogRouteName,
+                    ),
+                    builder: (context) => WillPopScope(
+                          onWillPop: () async => false,
+                          child: MyDialogBox(
+                            title: localizations.connectIranianIP,
+                            description: localizations.ipDescription,
+                            actionSubmitText: localizations.turnedOff,
+                            onSubmitted: () {
+                              Navigator.of(context).pop();
+                              trackingBloc.add(GetRequiredDataWithLoading());
+                            },
+                            actionCancelText: localizations.settings,
+                            onCanceled: () async {
+                              PlatformChannel platformChannel =
+                                  PlatformChannel();
+                              await platformChannel.openVpnSettings();
+                            },
+                          ),
+                        ),
+                    barrierDismissible: false);
               }
             },
             builder: (context, state) {

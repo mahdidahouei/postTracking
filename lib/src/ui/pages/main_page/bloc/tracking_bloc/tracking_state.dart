@@ -9,7 +9,13 @@ abstract class TrackingState extends Equatable {
 
 class TrackingInitial extends TrackingState {}
 
+class LoadingRequiredData extends TrackingState {}
+
 class LoadingTracking extends TrackingState {}
+
+class LoadingIp extends TrackingState {}
+
+class ForeignIP extends TrackingState {}
 
 class TrackingCompleted extends TrackingState {
   final TrackingDataResult result;

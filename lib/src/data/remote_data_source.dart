@@ -131,4 +131,30 @@ class RemoteDataSource {
       statusCode: 200,
     );
   }
+
+  /*
+{
+   "status": "success",
+   "country": "Iran",
+   "countryCode": "IR",
+   "region": "23",
+   "regionName": "Tehran",
+   "city": "Tehran",
+   "zip": "",
+   "lat": 35.7599,
+   "lon": 51.4739,
+   "timezone": "Asia/Tehran",
+   "isp": "IRANCELL",
+   "org": "",
+   "as": "AS44244 Iran Cell Service and Communication Company",
+   "query": "5.124.238.182"
+}
+   */
+
+  Future<bool> isIranianIP() async {
+    const path = "http://ip-api.com/json";
+    final response = await client.get(path);
+
+    return response.data["countryCode"] == "IR";
+  }
 }

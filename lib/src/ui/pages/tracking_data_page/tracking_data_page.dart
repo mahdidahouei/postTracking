@@ -185,7 +185,7 @@ class _TrackingDataPageState extends State<TrackingDataPage> {
               ),
             );
           } else {
-            return const SizedBox.shrink();
+            return Text(localizations.errorOccurred);
           }
         },
       ),

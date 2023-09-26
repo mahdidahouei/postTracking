@@ -9,6 +9,8 @@ abstract class TrackingEvent extends Equatable {
 
 class GetRequiredData extends TrackingEvent {}
 
+class GetRequiredDataWithLoading extends TrackingEvent {}
+
 class TrackPostalId extends TrackingEvent {
   final String postalId;
 

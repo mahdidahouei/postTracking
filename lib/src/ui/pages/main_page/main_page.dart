@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:post_tracking/src/ui/global/widgets/designed_with_love.dart';
+import 'package:post_tracking/src/ui/global/widgets/responsive_single_child_scroll_view.dart';
 
 import '../../global/utils/constants.dart';
 import '../../global/widgets/my_app_bar.dart';
 import '../../global/widgets/my_scaffold.dart';
-import 'bloc/tracking_bloc/tracking_bloc.dart';
 import 'widgets/recent_tracking_numbers.dart';
 import 'widgets/tracking_number_input.dart';
 
@@ -33,23 +33,32 @@ class _MainPageState extends State<MainPage> {
         appBar: MyAppBar(
           title: localizations.trackingPostalGoods,
         ),
-        body: BlocBuilder<TrackingBloc, TrackingState>(
-          builder: (context, state) {
-            return const SingleChildScrollView(
-              child: Padding(
-                padding: kPagesPadding,
-                child: Column(
+        body: const ResponsiveSingleChildScrollView(
+          child: Padding(
+            padding: kPagesPadding,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     kSpaceL,
                     TrackingNumberInput(),
                     kSpaceL,
                     RecentTrackingNumbers(),
+                    kSpaceL,
                   ],
                 ),
-              ),
-            );
-          },
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: DesignedWithLove(),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
