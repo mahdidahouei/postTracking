@@ -5,7 +5,7 @@ import '../utils/constants.dart';
 import 'dismissible_focus.dart';
 
 class AppButton extends StatelessWidget {
-  static const height = 44.0;
+  static const height = 64.0;
 
   const AppButton({
     Key? key,

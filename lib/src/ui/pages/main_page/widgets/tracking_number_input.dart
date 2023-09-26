@@ -25,13 +25,15 @@ class _TrackingNumberInputState extends State<TrackingNumberInput> {
     _textEditingController = TextEditingController();
   }
 
-  void _onTap() {
+  void _onTap() async {
     final isValid = _textFieldKey.currentState?.validate() ?? true;
     if (isValid) {
       dismissFocus(context);
     }
     if (isValid) {
-      Navigator.of(context).push(
+      final navigator = Navigator.of(context);
+      await Future.delayed(const Duration(milliseconds: 85));
+      navigator.push(
         MaterialPageRoute(
           builder: (context) =>
               TrackingDataPage(trackingNumber: _textEditingController.text),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:post_tracking/src/ui/global/animations/animated_size_opacity.dart';
+import 'package:post_tracking/src/ui/global/utils/constants.dart';
 
 import '../../../../data/models/tracking_data.dart';
 import '../../../global/animations/animated_zoom_in_out.dart';
@@ -39,7 +41,7 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
   Future<void> _setTrackingNumberFromClipBoard() async {
     final clipBoardTrackingNumber = await _extractTrackingNumberFromClipBoard();
     setState(() {
-      if (clipBoardTrackingNumber != null) {
+      if (clipBoardTrackingNumber != _previousClipBoardTrackingNumber) {
         _clipBoardTrackingNumber = clipBoardTrackingNumber;
 
         _previousClipBoardTrackingNumber = _clipBoardTrackingNumber;
@@ -98,55 +100,69 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
     return null;
   }
 
-  int _previousListLength = 0;
-
   @override
   Widget build(BuildContext context) {
     final trackingStorageBloc = BlocProvider.of<TrackingStorageBloc>(context);
     final localizations = AppLocalizations.of(context)!;
+    final themeData = Theme.of(context);
 
     return BlocBuilder<TrackingStorageBloc, TrackingStorageState>(
       bloc: trackingStorageBloc,
       builder: (context, state) {
         // _handleListLength(state.allTrackingData);
         if (state.state == LocalBlocState.loaded) {
-          return ListView.builder(
-            // key: _listKey,
-            itemCount: state.allTrackingData.length +
-                (_clipBoardTrackingNumber == null ? 0 : 1),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              late Widget tile;
-
-              if (_clipBoardTrackingNumber != null) {
-                if (index == 0) {
-                  tile = AnimatedZoomInOut(
-                    child: RecentTrackingItemTile(
-                      trackingData: TrackingData(
-                        name: localizations.fromClipboard,
-                        trackingNumber: _clipBoardTrackingNumber!,
-                      ),
-                      // animation: animation,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AnimatedSizeOpacity(
+                show: _clipBoardTrackingNumber != null,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      localizations.fromClipboard,
+                      style: themeData.textTheme.titleMedium,
                     ),
-                  );
-                } else {
-                  tile = RecentTrackingItemTile(
-                    trackingData: state.allTrackingData[index - 1],
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    AnimatedZoomInOut(
+                      child: RecentTrackingItemTile(
+                        trackingData: TrackingData(
+                          name: "",
+                          trackingNumber: _clipBoardTrackingNumber ?? "",
+                        ),
+                        // animation: animation,
+                      ),
+                    ),
+                    kSpaceL,
+                  ],
+                ),
+              ),
+              if (state.allTrackingData.isNotEmpty)
+                Text(
+                  localizations.recentTracking,
+                  style: themeData.textTheme.titleMedium,
+                ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              ListView.builder(
+                // key: _listKey,
+                itemCount: state.allTrackingData.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return RecentTrackingItemTile(
+                    trackingData: state.allTrackingData[index],
                     // animation: animation,
                   );
-                }
-              } else {
-                tile = RecentTrackingItemTile(
-                  trackingData: state.allTrackingData[index],
-                  // animation: animation,
-                );
-              }
-              return tile;
-            },
-            // separatorBuilder: (context, _) => const SizedBox(
-            //   height: 8.0,
-            // ),
+                },
+                // separatorBuilder: (context, _) => const SizedBox(
+                //   height: 8.0,
+                // ),
+              ),
+            ],
           );
         }
         return const SizedBox.shrink();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -20,27 +21,36 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return MyScaffold(
-      appBar: MyAppBar(
-        title: localizations.trackingPostalGoods,
+    final themeData = Theme.of(context);
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: themeData.brightness == Brightness.light
+            ? Brightness.dark
+            : Brightness.light,
       ),
-      body: BlocBuilder<TrackingBloc, TrackingState>(
-        builder: (context, state) {
-          return const SingleChildScrollView(
-            child: Padding(
-              padding: kPagesPadding,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  kSpaceL,
-                  TrackingNumberInput(),
-                  kSpaceL,
-                  RecentTrackingNumbers(),
-                ],
+      child: MyScaffold(
+        appBar: MyAppBar(
+          title: localizations.trackingPostalGoods,
+        ),
+        body: BlocBuilder<TrackingBloc, TrackingState>(
+          builder: (context, state) {
+            return const SingleChildScrollView(
+              child: Padding(
+                padding: kPagesPadding,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    kSpaceL,
+                    TrackingNumberInput(),
+                    kSpaceL,
+                    RecentTrackingNumbers(),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
