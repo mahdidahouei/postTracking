@@ -179,8 +179,10 @@ class _TrackingDataPageState extends State<TrackingDataPage> {
               ),
             );
           } else if (state is LoadingTracking) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: CircularProgressIndicator(
+                color: themeData.primaryColor,
+              ),
             );
           } else {
             return const SizedBox.shrink();
