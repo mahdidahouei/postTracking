@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:post_tracking/src/ui/global/utils/constants.dart';
 
-import './tracking_item_widget.dart';
+import './tracking_item_tile.dart';
 import '../../../../data/models/tracking_date.dart';
 import '../../../global/widgets/my_shadow_box.dart';
 
@@ -49,7 +49,7 @@ class TrackingDay extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(
                     height: 8.0,
                   ),
-                  itemBuilder: (context, index) => TrackingItemWidget(
+                  itemBuilder: (context, index) => TrackingItemTile(
                     itemData: trackingDate.trackingData[index],
                   ),
                   itemCount: trackingDate.trackingData.length,

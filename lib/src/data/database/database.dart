@@ -10,10 +10,16 @@ part 'database.g.dart';
 class TrackingNumbers extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get name => text().withLength(min: 1, max: 99)();
+  TextColumn get name => text()();
 
   TextColumn get trackingNumber =>
       text().unique().withLength(min: 24, max: 24)();
+
+  DateTimeColumn get updatedAt =>
+      dateTime().withDefault(Constant(DateTime.now()))();
+
+  DateTimeColumn get createdAt =>
+      dateTime().withDefault(Constant(DateTime.now()))();
 }
 
 @DriftDatabase(tables: [TrackingNumbers])

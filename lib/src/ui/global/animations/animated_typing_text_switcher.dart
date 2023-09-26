@@ -11,12 +11,14 @@ class AnimatedTypingTextSwitcher extends StatefulWidget {
     this.removeDuration = const Duration(milliseconds: 250),
     this.typeOnFirstBuild = false,
     this.removeFromEndToStart = true,
-  })  : typeDurationRange = Duration(milliseconds: text.length * 69),
+    Duration? typeDurationRange,
+  })  : typeRange =
+            typeDurationRange ?? Duration(milliseconds: text.length * 69),
         super(key: key);
 
   final String text;
   final TextStyle? style;
-  final Duration typeDurationRange;
+  final Duration typeRange;
   final Duration removeDuration;
   final bool typeOnFirstBuild;
   final bool removeFromEndToStart;
@@ -80,7 +82,7 @@ class _AnimatedTypingTextSwitcherState extends State<AnimatedTypingTextSwitcher>
   Future<void> _type(String text) async {
     _isTyping = true;
     final characterTypeDurationMilliseconds =
-        widget.typeDurationRange.inMilliseconds / text.length;
+        widget.typeRange.inMilliseconds / text.length;
     for (int i = 0; i <= text.length; i++) {
       if (_cancelTyping) {
         break;

@@ -23,6 +23,8 @@ class TrackingStorageBloc
           allTrackingData: event.allTrackingData,
           state: LocalBlocState.loaded,
         ));
+      } else if (event is DeleteTrackingData) {
+        await localDataSource.removeTrackingNumber(event.trackingNumber);
       }
     });
 

@@ -11,8 +11,10 @@ class TrackingDataResult {
   final String? receiverName;
   final String? weight;
   final String? price;
+  final String trackingNumber;
 
   TrackingDataResult({
+    required this.trackingNumber,
     required this.boxContent,
     required this.serviceType,
     required this.originPostOffice,
@@ -35,6 +37,7 @@ class TrackingDataResult {
 
   Map<String, dynamic> toJson() {
     return {
+      'trackingNumber': trackingNumber,
       'data': data.map((date) => date.toJson()).toList(),
       'boxContent': boxContent,
       'serviceType': serviceType,

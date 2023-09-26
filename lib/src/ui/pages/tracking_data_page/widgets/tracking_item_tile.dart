@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:post_tracking/src/data/models/tracking_item.dart';
-import 'package:post_tracking/src/ui/global/utils/constants.dart';
 
-class TrackingItemWidget extends StatelessWidget {
+import '../../../../data/models/tracking_item.dart';
+import '../../../global/utils/constants.dart';
+
+class TrackingItemTile extends StatelessWidget {
   static const height = 60.0;
 
   final TrackingItem itemData;
 
-  const TrackingItemWidget({
+  const TrackingItemTile({
     Key? key,
     required this.itemData,
   }) : super(key: key);
@@ -21,6 +22,7 @@ class TrackingItemWidget extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {},
+        borderRadius: kMyBorderRadius,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: kMyBorderRadius,

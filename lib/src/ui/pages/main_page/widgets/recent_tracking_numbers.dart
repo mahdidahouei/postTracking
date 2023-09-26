@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:post_tracking/src/ui/global/animations/animated_size_opacity.dart';
+import 'package:post_tracking/src/ui/global/animations/my_animated_opacity.dart';
 import 'package:post_tracking/src/ui/global/utils/constants.dart';
+import 'package:post_tracking/src/ui/pages/main_page/bloc/tracking_bloc/tracking_bloc.dart';
 
 import '../../../../data/models/tracking_data.dart';
 import '../../../global/animations/animated_zoom_in_out.dart';
@@ -22,6 +24,7 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
   late final AppLifecycleListener _listener;
 
   String? _clipBoardTrackingNumber;
+  String? _clipBoardTrackingName;
   String? _previousClipBoardTrackingNumber;
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
@@ -43,6 +46,9 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
     setState(() {
       if (clipBoardTrackingNumber != _previousClipBoardTrackingNumber) {
         _clipBoardTrackingNumber = clipBoardTrackingNumber;
+        final trackingBloc = BlocProvider.of<TrackingBloc>(context);
+
+        trackingBloc.add(TrackPostalId(postalId: _clipBoardTrackingNumber!));
 
         _previousClipBoardTrackingNumber = _clipBoardTrackingNumber;
       }
@@ -108,61 +114,121 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
 
     return BlocBuilder<TrackingStorageBloc, TrackingStorageState>(
       bloc: trackingStorageBloc,
-      builder: (context, state) {
+      builder: (context, storageState) {
+        final list = [
+          for (final item in storageState.allTrackingData) item,
+        ];
+        if (list.any(
+            (element) => element.trackingNumber == _clipBoardTrackingNumber)) {
+          final index = list.indexWhere(
+              (element) => element.trackingNumber == _clipBoardTrackingNumber);
+          list.removeAt(index);
+        }
         // _handleListLength(state.allTrackingData);
-        if (state.state == LocalBlocState.loaded) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AnimatedSizeOpacity(
-                show: _clipBoardTrackingNumber != null,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.fromClipboard,
-                      style: themeData.textTheme.titleMedium,
+        if (storageState.state == LocalBlocState.loaded) {
+          return BlocConsumer<TrackingBloc, TrackingState>(
+            listener: (context, state) {
+              if (state is TrackingCompleted) {
+                BlocProvider.of<TrackingStorageBloc>(context).add(
+                  SaveTrackingData(
+                    TrackingData(
+                      name: state.result.trackingFullName,
+                      trackingNumber: state.result.trackingNumber,
                     ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
-                    AnimatedZoomInOut(
-                      child: RecentTrackingItemTile(
-                        trackingData: TrackingData(
-                          name: "",
-                          trackingNumber: _clipBoardTrackingNumber ?? "",
+                  ),
+                );
+                if (state.result.trackingNumber == _clipBoardTrackingNumber) {
+                  _clipBoardTrackingName = state.result.trackingFullName;
+                }
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AnimatedSizeOpacity(
+                    show: _clipBoardTrackingNumber != null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localizations.fromClipboard,
+                          style: themeData.textTheme.titleMedium,
                         ),
-                        // animation: animation,
-                      ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        AnimatedZoomInOut(
+                          child: RecentTrackingItemTile(
+                            trackingData: TrackingData(
+                              name: storageState.allTrackingData.any(
+                                      (element) =>
+                                          element.trackingNumber ==
+                                          _clipBoardTrackingNumber)
+                                  ? storageState.allTrackingData
+                                      .firstWhere((element) =>
+                                          element.trackingNumber ==
+                                          _clipBoardTrackingNumber)
+                                      .name
+                                  : _clipBoardTrackingName ?? "",
+                              trackingNumber: _clipBoardTrackingNumber ?? "",
+                            ),
+                            loadingTitle: storageState.allTrackingData.any(
+                                    (element) =>
+                                        element.trackingNumber ==
+                                        _clipBoardTrackingNumber)
+                                ? false
+                                : state is LoadingTracking,
+                            shouldLoadData: state is TrackingCompleted
+                                ? state.result.trackingNumber !=
+                                    _clipBoardTrackingNumber
+                                : false,
+                            dismissible: false,
+                            // animation: animation,
+                          ),
+                        ),
+                        kSpaceL,
+                      ],
                     ),
-                    kSpaceL,
-                  ],
-                ),
-              ),
-              if (state.allTrackingData.isNotEmpty)
-                Text(
-                  localizations.recentTracking,
-                  style: themeData.textTheme.titleMedium,
-                ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              ListView.builder(
-                // key: _listKey,
-                itemCount: state.allTrackingData.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return RecentTrackingItemTile(
-                    trackingData: state.allTrackingData[index],
-                    // animation: animation,
-                  );
-                },
-                // separatorBuilder: (context, _) => const SizedBox(
-                //   height: 8.0,
-                // ),
-              ),
-            ],
+                  ),
+                  MyAnimatedOpacity(
+                    show: list.isNotEmpty,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localizations.recentTracking,
+                          style: themeData.textTheme.titleMedium,
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        ListView.builder(
+                          // key: _listKey,
+                          itemCount: list.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return RecentTrackingItemTile(
+                              key: ValueKey(list[index].trackingNumber),
+                              trackingData: list[index],
+                              shouldLoadData: state is TrackingCompleted
+                                  ? state.result.trackingNumber !=
+                                      list[index].trackingNumber
+                                  : true,
+                              // animation: animation,
+                            );
+                          },
+                          // separatorBuilder: (context, _) => const SizedBox(
+                          //   height: 8.0,
+                          // ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         }
         return const SizedBox.shrink();

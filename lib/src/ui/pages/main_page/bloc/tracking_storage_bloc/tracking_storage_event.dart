@@ -18,6 +18,15 @@ class SaveTrackingData extends TrackingStorageEvent {
       ];
 }
 
+class DeleteTrackingData extends TrackingStorageEvent {
+  final String trackingNumber;
+
+  const DeleteTrackingData({required this.trackingNumber});
+
+  @override
+  List<Object?> get props => [trackingNumber];
+}
+
 class _EmitTrackingData extends TrackingStorageEvent {
   final List<TrackingData> allTrackingData;
 

@@ -22,10 +22,7 @@ class $TrackingNumbersTable extends TrackingNumbers
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
-      additionalChecks:
-          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 99),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _trackingNumberMeta =
       const VerificationMeta('trackingNumber');
   @override
@@ -36,8 +33,25 @@ class $TrackingNumbersTable extends TrackingNumbers
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
   @override
-  List<GeneratedColumn> get $columns => [id, name, trackingNumber];
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: Constant(DateTime.now()));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, name, trackingNumber, updatedAt, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -65,6 +79,14 @@ class $TrackingNumbersTable extends TrackingNumbers
     } else if (isInserting) {
       context.missing(_trackingNumberMeta);
     }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
     return context;
   }
 
@@ -80,6 +102,10 @@ class $TrackingNumbersTable extends TrackingNumbers
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       trackingNumber: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}tracking_number'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -93,14 +119,22 @@ class TrackingNumber extends DataClass implements Insertable<TrackingNumber> {
   final int id;
   final String name;
   final String trackingNumber;
+  final DateTime updatedAt;
+  final DateTime createdAt;
   const TrackingNumber(
-      {required this.id, required this.name, required this.trackingNumber});
+      {required this.id,
+      required this.name,
+      required this.trackingNumber,
+      required this.updatedAt,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
     map['tracking_number'] = Variable<String>(trackingNumber);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
@@ -109,6 +143,8 @@ class TrackingNumber extends DataClass implements Insertable<TrackingNumber> {
       id: Value(id),
       name: Value(name),
       trackingNumber: Value(trackingNumber),
+      updatedAt: Value(updatedAt),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -119,6 +155,8 @@ class TrackingNumber extends DataClass implements Insertable<TrackingNumber> {
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       trackingNumber: serializer.fromJson<String>(json['trackingNumber']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -128,69 +166,99 @@ class TrackingNumber extends DataClass implements Insertable<TrackingNumber> {
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
       'trackingNumber': serializer.toJson<String>(trackingNumber),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
-  TrackingNumber copyWith({int? id, String? name, String? trackingNumber}) =>
+  TrackingNumber copyWith(
+          {int? id,
+          String? name,
+          String? trackingNumber,
+          DateTime? updatedAt,
+          DateTime? createdAt}) =>
       TrackingNumber(
         id: id ?? this.id,
         name: name ?? this.name,
         trackingNumber: trackingNumber ?? this.trackingNumber,
+        updatedAt: updatedAt ?? this.updatedAt,
+        createdAt: createdAt ?? this.createdAt,
       );
   @override
   String toString() {
     return (StringBuffer('TrackingNumber(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('trackingNumber: $trackingNumber')
+          ..write('trackingNumber: $trackingNumber, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, trackingNumber);
+  int get hashCode =>
+      Object.hash(id, name, trackingNumber, updatedAt, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is TrackingNumber &&
           other.id == this.id &&
           other.name == this.name &&
-          other.trackingNumber == this.trackingNumber);
+          other.trackingNumber == this.trackingNumber &&
+          other.updatedAt == this.updatedAt &&
+          other.createdAt == this.createdAt);
 }
 
 class TrackingNumbersCompanion extends UpdateCompanion<TrackingNumber> {
   final Value<int> id;
   final Value<String> name;
   final Value<String> trackingNumber;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime> createdAt;
   const TrackingNumbersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.trackingNumber = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   TrackingNumbersCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required String trackingNumber,
+    this.updatedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
   })  : name = Value(name),
         trackingNumber = Value(trackingNumber);
   static Insertable<TrackingNumber> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<String>? trackingNumber,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (trackingNumber != null) 'tracking_number': trackingNumber,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
   TrackingNumbersCompanion copyWith(
-      {Value<int>? id, Value<String>? name, Value<String>? trackingNumber}) {
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String>? trackingNumber,
+      Value<DateTime>? updatedAt,
+      Value<DateTime>? createdAt}) {
     return TrackingNumbersCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       trackingNumber: trackingNumber ?? this.trackingNumber,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -206,6 +274,12 @@ class TrackingNumbersCompanion extends UpdateCompanion<TrackingNumber> {
     if (trackingNumber.present) {
       map['tracking_number'] = Variable<String>(trackingNumber.value);
     }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
     return map;
   }
 
@@ -214,7 +288,9 @@ class TrackingNumbersCompanion extends UpdateCompanion<TrackingNumber> {
     return (StringBuffer('TrackingNumbersCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('trackingNumber: $trackingNumber')
+          ..write('trackingNumber: $trackingNumber, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }

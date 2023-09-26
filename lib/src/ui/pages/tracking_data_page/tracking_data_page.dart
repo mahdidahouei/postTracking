@@ -5,19 +5,19 @@ import 'package:post_tracking/src/ui/global/widgets/app_button.dart';
 import 'package:post_tracking/src/ui/global/widgets/my_app_bar.dart';
 import 'package:post_tracking/src/ui/global/widgets/my_bottom_sheet.dart';
 
-import '../../../data/models/tracking_data.dart';
 import '../../global/widgets/my_scaffold.dart';
 import '../main_page/bloc/tracking_bloc/tracking_bloc.dart';
-import '../main_page/bloc/tracking_storage_bloc/tracking_storage_bloc.dart';
 import 'widgets/tracking_day.dart';
 
 class TrackingDataPage extends StatefulWidget {
   const TrackingDataPage({
     Key? key,
     required this.trackingNumber,
+    this.shouldLoadData = true,
   }) : super(key: key);
 
   final String trackingNumber;
+  final bool shouldLoadData;
 
   @override
   State<TrackingDataPage> createState() => _TrackingDataPageState();
@@ -29,8 +29,10 @@ class _TrackingDataPageState extends State<TrackingDataPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final trackingBloc = BlocProvider.of<TrackingBloc>(context);
-      trackingBloc.add(TrackPostalId(postalId: widget.trackingNumber));
+      if (widget.shouldLoadData) {
+        final trackingBloc = BlocProvider.of<TrackingBloc>(context);
+        trackingBloc.add(TrackPostalId(postalId: widget.trackingNumber));
+      }
     });
   }
 
@@ -76,20 +78,8 @@ class _TrackingDataPageState extends State<TrackingDataPage> {
     final themeData = Theme.of(context);
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      body: BlocConsumer<TrackingBloc, TrackingState>(
+      body: BlocBuilder<TrackingBloc, TrackingState>(
         bloc: trackingBloc,
-        listener: (context, state) {
-          if (state is TrackingCompleted) {
-            BlocProvider.of<TrackingStorageBloc>(context).add(
-              SaveTrackingData(
-                TrackingData(
-                  name: state.result.trackingFullName,
-                  trackingNumber: widget.trackingNumber,
-                ),
-              ),
-            );
-          }
-        },
         builder: (context, state) {
           if (state is TrackingCompleted) {
             return MyScaffold(

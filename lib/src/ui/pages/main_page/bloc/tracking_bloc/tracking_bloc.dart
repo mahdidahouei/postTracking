@@ -75,7 +75,7 @@ class TrackingBloc extends Bloc<TrackingEvent, TrackingState> {
     final requiredData = await _requiredDataCompleter!.future;
 
     final result = await _remoteDataSource.track(
-      postalId: event.postalId,
+      trackingNumber: event.postalId,
       sessionId: requiredData.sessionId,
       bigIPServerPoolFarm126: requiredData.bigIPServerPoolFarm126,
       viewState: requiredData.viewState,

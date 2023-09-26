@@ -67,7 +67,7 @@ class RemoteDataSource {
   }
 
   Future<TrackingDataResult> track({
-    required String postalId,
+    required String trackingNumber,
     required String sessionId,
     required String bigIPServerPoolFarm126,
     required String viewState,
@@ -84,7 +84,7 @@ class RemoteDataSource {
       "__VIEWSTATE": viewState,
       "__VIEWSTATEGENERATOR": viewStateGenerator,
       "__EVENTVALIDATION": eventValidation,
-      "txtbSearch": postalId,
+      "txtbSearch": trackingNumber,
       "__VIEWSTATEENCRYPTED": "",
       "__ASYNCPOST": "true",
     };
@@ -120,7 +120,7 @@ class RemoteDataSource {
       ),
     );
 
-    return extractTrackingData(response.data);
+    return extractTrackingData(response.data, trackingNumber);
   }
 
   Future<Response> _getTestData(RequestOptions options) async {
