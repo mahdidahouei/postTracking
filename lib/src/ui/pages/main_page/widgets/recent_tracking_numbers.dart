@@ -114,7 +114,7 @@ class _RecentTrackingNumbersState extends State<RecentTrackingNumbers> {
   }
 
   void _checkIp() {
-    BlocProvider.of<TrackingBloc>(context).add(GetRequiredDataWithLoading());
+    BlocProvider.of<TrackingBloc>(context).add(GetRequiredData());
   }
 
   static const _ipDialogRouteName = "ip-dialog";

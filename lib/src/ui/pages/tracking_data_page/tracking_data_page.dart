@@ -185,7 +185,7 @@ class _TrackingDataPageState extends State<TrackingDataPage> {
               ),
             );
           } else {
-            return Text(localizations.errorOccurred);
+            return Center(child: Text(localizations.errorOccurred));
           }
         },
       ),
