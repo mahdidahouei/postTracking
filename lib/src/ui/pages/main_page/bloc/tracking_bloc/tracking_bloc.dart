@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:post_tracking/src/data/models/required_data.dart';
 import 'package:post_tracking/src/data/models/tracking_data_result.dart';
 
-import '../../../../data/remote_data_source.dart';
+import '../../../../../data/remote_data_source.dart';
 
 part 'tracking_event.dart';
 part 'tracking_state.dart';

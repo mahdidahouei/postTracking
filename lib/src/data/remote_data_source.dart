@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/services.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:post_tracking/src/data/models/required_data.dart';
 import 'package:post_tracking/src/data/models/tracking_data_result.dart';
@@ -105,6 +106,12 @@ class RemoteDataSource {
           "application/x-www-form-urlencoded; charset=utf-8",
     };
 
+    // final response = await _getTestData(
+    //   RequestOptions(
+    //     path: "https://tracking.post.ir/",
+    //     headers: headers,
+    //   ),
+    // );
     final response = await client.post(
       "/",
       data: formData,
@@ -114,5 +121,14 @@ class RemoteDataSource {
     );
 
     return extractTrackingData(response.data);
+  }
+
+  Future<Response> _getTestData(RequestOptions options) async {
+    final html = await rootBundle.loadString('test_html/post_tracking.html');
+    return Response(
+      requestOptions: options,
+      data: html,
+      statusCode: 200,
+    );
   }
 }

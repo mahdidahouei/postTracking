@@ -34,7 +34,8 @@ class $TrackingNumbersTable extends TrackingNumbers
       additionalChecks:
           GeneratedColumn.checkTextLength(minTextLength: 24, maxTextLength: 24),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
   @override
   List<GeneratedColumn> get $columns => [id, name, trackingNumber];
   @override

@@ -39,6 +39,7 @@ flutter:
   uses-material-design: true
   assets:
     - fonts/
+    - test_html/
   fonts:
     - family: IRANSansFaNum
       fonts:

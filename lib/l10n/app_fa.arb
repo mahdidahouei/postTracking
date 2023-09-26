@@ -3,5 +3,19 @@
     "postalId": "بارکد پستی",
     "inquiry": "استعلام",
     "enterPostalId": "لطفا بارکد پستی را وارد کنید",
-    "postalId24": "بارکد پستی باید ۲۴ رقمی باشد"
+    "postalId24": "بارکد پستی باید ۲۴ رقمی باشد",
+    "fromClipboard": "از کلیپ بورد",
+    "noName": "بدون نام",
+    "boxContent": "محتویات بسته",
+    "serviceType": "نوع سرویس",
+    "origin": "مبدا",
+    "originPostOffice": "دفتر پستی مبدا",
+    "destination": "مقصد",
+    "senderName": "نام فرستنده",
+    "receiverName": "نام گیرنده",
+    "weight": "وزن",
+    "price": "هزینه پستی",
+    "moreInfo": "اطلاعات بیشتر",
+    "back": "برگشت",
+    "trackingPostalGoods": "رهگیری مرسوله‌های پستی"
 }

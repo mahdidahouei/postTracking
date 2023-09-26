@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' show parse;
-import 'package:post_tracking/src/ui/pages/main_page/bloc/tracking_bloc.dart';
+import 'package:post_tracking/src/ui/global/utils/list_extention.dart';
+import 'package:post_tracking/src/ui/pages/main_page/bloc/tracking_bloc/tracking_bloc.dart';
 
 import '../models/tracking_data_result.dart';
 import '../models/tracking_date.dart';
@@ -17,25 +18,27 @@ TrackingDataResult extractTrackingData(String htmlContent) {
   final pnlResultDiv = document.getElementById('pnlResult');
 
   // Iterate through the rows within the parent div
-  pnlResultDiv?.querySelectorAll('.row').forEach((row) {
-    if (row.querySelector('.newtdheader') != null) {
-      // This is a header row with the date
-      if (currentDate != null) {
-        trackingDataList.add(TrackingDate(currentDate!, currentTrackingData));
-        currentTrackingData = [];
+  if (pnlResultDiv != null) {
+    for (final row in pnlResultDiv.querySelectorAll('.row')) {
+      if (row.querySelector('.newtdheader') != null) {
+        // This is a header row with the date
+        if (currentDate != null) {
+          trackingDataList.add(TrackingDate(currentDate!, currentTrackingData));
+          currentTrackingData = [];
+        }
+        currentDate = row.querySelector('.newtdheader')?.text ?? " ";
+      } else if (row.querySelectorAll('.newtddata').length == 4) {
+        // This is a tracking data row
+        TrackingItem trackingItem = TrackingItem(
+          number: row.querySelector('.newtddata:nth-child(4)')?.text ?? " ",
+          text: row.querySelector('.newtddata:nth-child(1)')?.text ?? " ",
+          location: row.querySelector('.newtddata:nth-child(2)')?.text ?? " ",
+          time: row.querySelector('.newtddata:nth-child(3)')?.text ?? " ",
+        );
+        currentTrackingData.add(trackingItem);
       }
-      currentDate = row.querySelector('.newtdheader')?.text ?? " ";
-    } else if (row.querySelectorAll('.newtddata').length == 4) {
-      // This is a tracking data row
-      TrackingItem trackingItem = TrackingItem(
-        number: row.querySelector('.newtddata:nth-child(4)')?.text ?? " ",
-        text: row.querySelector('.newtddata:nth-child(1)')?.text ?? " ",
-        location: row.querySelector('.newtddata:nth-child(2)')?.text ?? " ",
-        time: row.querySelector('.newtddata:nth-child(3)')?.text ?? " ",
-      );
-      currentTrackingData.add(trackingItem);
     }
-  });
+  }
 
   // Add the last set of tracking data
   if (currentDate != null) {
@@ -44,15 +47,16 @@ TrackingDataResult extractTrackingData(String htmlContent) {
 
   // Extract data from the HTML.
   final boxContent = document.querySelector('.newcoldata')?.text ?? '';
-  final serviceType = document.querySelectorAll('.newcoldata')[1]?.text ?? '';
-  final originPostOffice =
-      document.querySelectorAll('.newcoldata')[2]?.text ?? '';
-  final origin = document.querySelectorAll('.newcoldata')[3]?.text ?? '';
-  final destination = document.querySelectorAll('.newcoldata')[4]?.text ?? '';
-  final senderName = document.querySelectorAll('.newcoldata')[5]?.text ?? '';
-  final receiverName = document.querySelectorAll('.newcoldata')[6]?.text ?? '';
-  final weight = document.querySelectorAll('.newcoldata')[7]?.text ?? '';
-  final price = document.querySelectorAll('.newcoldata')[8]?.text ?? '';
+  final list = document.querySelectorAll('.newcoldata');
+
+  final serviceType = getItemAtIndex(list, 1)?.text ?? '';
+  final originPostOffice = getItemAtIndex(list, 2)?.text ?? '';
+  final origin = getItemAtIndex(list, 3)?.text ?? '';
+  final destination = getItemAtIndex(list, 4)?.text ?? '';
+  final senderName = getItemAtIndex(list, 5)?.text ?? '';
+  final receiverName = getItemAtIndex(list, 6)?.text ?? '';
+  final weight = getItemAtIndex(list, 7)?.text ?? '';
+  final price = getItemAtIndex(list, 8)?.text ?? '';
 
   final trackingData = TrackingDataResult(
     data: trackingDataList,

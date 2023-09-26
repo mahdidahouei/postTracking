@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:post_tracking/src/data/models/tracking_data.dart';
+
 import 'database/database.dart';
 
 class LocalDataSource {
@@ -5,18 +9,26 @@ class LocalDataSource {
 
   LocalDataSource() : db = AppDatabase();
 
-  Future<void> insertTrackingNumber(String name, String trackingNumber) async {
-    // db.into(db.trackingNumbers).insert
-    // await db.into(db.trackingNumbers).insert(
-    //       TrackingNumbersCompanion.insert(
-    //         name: name,
-    //         trackingNumber: trackingNumber,
-    //       ),
-    //     );
+  Future<void> insertTrackingNumber(TrackingData trackingData) async {
+    db.into(db.trackingNumbers).insertOnConflictUpdate(
+          TrackingNumbersCompanion.insert(
+            name: trackingData.name ?? "",
+            trackingNumber: trackingData.trackingNumber,
+          ),
+        );
   }
 
-  Future<List<TrackingNumber>> getTrackingNumbers() async {
-    final trackingNumbers = await db.select(db.trackingNumbers).get();
-    return trackingNumbers;
+  Stream<List<TrackingData>> getTrackingNumbers() async* {
+    final trackingNumbers = db.select(db.trackingNumbers).watch();
+    final streamController = StreamController<List<TrackingData>>();
+    trackingNumbers.listen((List<TrackingNumber> event) {
+      streamController.add(
+        event
+            .map((e) =>
+                TrackingData(name: e.name, trackingNumber: e.trackingNumber))
+            .toList(),
+      );
+    });
+    yield* streamController.stream;
   }
 }

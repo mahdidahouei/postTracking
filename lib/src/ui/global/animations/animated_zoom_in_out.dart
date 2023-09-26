@@ -10,8 +10,8 @@ class AnimatedZoomInOut extends StatefulWidget {
   const AnimatedZoomInOut({
     required this.child,
     this.duration = const Duration(seconds: 1),
-    this.maxScale = 1.12,
-    this.minScale = 1.0,
+    this.maxScale = 1.03,
+    this.minScale = 0.98,
     this.curve = Curves.easeInOut, // Default curve
   });
 

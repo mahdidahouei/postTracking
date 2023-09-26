@@ -25,7 +25,13 @@ class TrackingDataResult {
     required this.data,
   });
 
-  String get trackingFullName => "$boxContent $receiverName";
+  String? get trackingFullName {
+    final text = "$boxContent $receiverName";
+    if (text.trim().isEmpty) {
+      return null;
+    }
+    return text;
+  }
 
   Map<String, dynamic> toJson() {
     return {

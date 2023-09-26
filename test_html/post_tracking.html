@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!-- saved from url=(0025)https://tracking.post.ir/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>سامانه رهگیری مرسولات پستی</title><link href="./سامانه رهگیری مرسولات پستی_files/bootstrap.min-jadid.css" rel="stylesheet"><link href="./سامانه رهگیری مرسولات پستی_files/font-awesome.css" rel="stylesheet"><link href="./سامانه رهگیری مرسولات پستی_files/fonts.css" rel="stylesheet"><link href="./سامانه رهگیری مرسولات پستی_files/Site.css" rel="stylesheet"><link href="./سامانه رهگیری مرسولات پستی_files/confirm.css" rel="stylesheet">
+    <script src="./سامانه رهگیری مرسولات پستی_files/jquery.js"></script>
+    <script src="./سامانه رهگیری مرسولات پستی_files/bootstrap.js"></script>
+    <script src="./سامانه رهگیری مرسولات پستی_files/confirm.js"></script>
+    <script>
+        function a() {
+            $("#pnlvotebtn").fadeIn(100);
+            $('.moreinfo').fadeOut(0);
+            $(".postlogo img").css({ 'width': '75px' });
+            $(".rahgiriicon img").css({ 'width': '300px' });
+            $('.pnellogo').animate({
+                'margin-top': '0px',
+            }, 'slow')
+            //$(".search-panel #txtbSearch").css({ 'margin': '0', });
+            $(".postlogo").animate({
+                //'margin-top': '-105px',
+                'float': 'right',
+                //'margin-right': '180px',
+                'width': '67%'
+            }, "slow", function () {
+                $(this).html("<img style='width:50px;' src='Content/Image/postarmsitewhite.png'>")
+                    .addClass("TopShow");
+                $('.pnellogo').css({ 'background-color': '#08317d' })
+            });
+            $(".rahgiriicon").animate({
+                //'margin-top': '-75px',
+                //'margin-right':'220px',
+                'float': 'right',
+                'width': '60%'
+            }, "slow", function () {
+                $(this).html("<a href='http://www.post.ir'><img src='Content/Image/rahgirigicon-white0.png' style='margin-top:-10px;height:60px;'></a>")
+                    .addClass("TopShow");
+                $(".SubTrack").fadeIn();
+
+            });
+            $('.search-panel').animate({ 'margin-top': '-5px' }, 'slow');
+
+            $(".Header").css({ "display": 'none' });
+        }
+        function b() {
+
+            if ($(".pnlMoreDetils").css('display') == 'none') {
+                $(this).html('<i class="fa fa-hand-o-up" style="margin-left:3px"></i>پنهان کردن جزئیات<i class="fa fa-hand-o-up" style="margin-right:3px"></i>');
+            }
+            else
+                $(this).html('<i class="fa fa-hand-o-down" style="margin-left:3px"></i> مشاهده جزئیات کامل مرسوله<i class="fa fa-hand-o-down" style="margin-right:3px"></i>');
+            $(".pnlMoreDetils").fadeToggle();
+
+        }
+        function c() {
+
+            if ($(".pnlMoreIPSDetils").css('display') == 'none') {
+                $(this).html('<i class="fa fa-hand-o-up" style="margin-left:3px"></i>پنهان کردن جزئیات رهگیری خارجی<i class="fa fa-hand-o-up" style="margin-right:3px"></i>');
+            }
+            else
+                $(this).html('<i class="fa fa-hand-o-down" style="margin-left:3px"></i> مشاهده جزئیات کامل رهگیری خارجی مرسوله<i class="fa fa-hand-o-down" style="margin-right:3px"></i>');
+            $(".pnlMoreIPSDetils").fadeToggle();
+
+        }
+        function BindControlEvents() {
+            $("#btnVote").click(function () {
+                $("#txtVoteR").fadeOut();
+                $("#txtVoteT").fadeOut();
+                $("#btnVoteR").fadeOut();
+                $("#txtVoteR").hide();
+                $("#txtVoteT").hide();
+                $("#btnVoteR").hide();
+                $("#btnH0").css("background-color", "transparent");
+                $("#btnH1").css("background-color", "transparent");
+                $("#btnH2").css("background-color", "transparent");
+                $("#btnH3").css("background-color", "transparent");
+                $("#pnlvotebtn").fadeOut();
+            });
+            $("#btnH0").click(function () {
+                $("#btnH0").css("background-color", "#2ac0c7");
+                $("#btnH1").css("background-color", "transparent");
+                $("#btnH2").css("background-color", "transparent");
+                $("#btnH3").css("background-color", "transparent");
+                $.ajax({
+                    type: "POST",
+                    url: "Search.aspx/AddVote",
+                    data: "{'Vote':4,'Description':'','Tel':''}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    cache: false,
+                    success: function (msg) {
+                        //$("#frmVote").fadeToggle();
+                        $("#txtVoteR").fadeIn();
+                        $("#txtVoteT").fadeIn();
+                        $("#btnVoteR").fadeIn();
+                    }
+                });
+            });
+            $("#btnH1").click(function () {
+                $("#btnH0").css("background-color", "transparent");
+                $("#btnH1").css("background-color", "#2ac0c7");
+                $("#btnH2").css("background-color", "transparent");
+                $("#btnH3").css("background-color", "transparent");
+                $.ajax({
+                    type: "POST",
+                    url: "Search.aspx/AddVote",
+                    data: "{'Vote':3,'Description':'','Tel':''}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    cache: false,
+                    success: function (msg) {
+                        $("#txtVoteR").fadeIn();
+                        $("#txtVoteT").fadeIn();
+                        $("#btnVoteR").fadeIn();
+                    }
+                });
+            });
+            $("#btnH2").click(function () {
+                $("#btnH0").css("background-color", "transparent");
+                $("#btnH1").css("background-color", "transparent");
+                $("#btnH2").css("background-color", "#2ac0c7");
+                $("#btnH3").css("background-color", "transparent");
+                $.ajax({
+                    type: "POST",
+                    url: "Search.aspx/AddVote",
+                    data: "{'Vote':2,'Description':'','Tel':''}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    cache: false,
+                    success: function (msg) {
+                        $("#txtVoteR").fadeIn();
+                        $("#txtVoteT").fadeIn();
+                        $("#btnVoteR").fadeIn();
+                    }
+                });
+            });
+            $("#btnH3").click(function () {
+                $("#btnH0").css("background-color", "transparent");
+                $("#btnH1").css("background-color", "transparent");
+                $("#btnH2").css("background-color", "transparent");
+                $("#btnH3").css("background-color", "#2ac0c7");
+                $.ajax({
+                    type: "POST",
+                    url: "Search.aspx/AddVote",
+                    data: "{'Vote':1,'Description':'','Tel':''}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    cache: false,
+                    success: function (msg) {
+                        $("#txtVoteR").fadeIn();
+                        $("#txtVoteT").fadeIn();
+                        $("#btnVoteR").fadeIn();
+                    }
+                });
+            });
+            $("#btnVoteSave").click(function () {
+                var _des = $("#txtVoteReason").val();
+                var _tel = $("#txtVoteTel").val();
+                $.ajax({
+                    type: "POST",
+                    url: "Search.aspx/AddVote",
+                    data: "{'Vote':-1,'Description':'" + _des + "','Tel':'" + _tel + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    async: true,
+                    cache: false,
+                    success: function (msg) {
+                        $("#txtVoteR").fadeOut();
+                        $("#txtVoteT").fadeOut();
+                        $("#btnVoteR").fadeOut();
+                        $("#txtVoteR").hide();
+                        $("#txtVoteT").hide();
+                        $("#btnVoteR").hide();
+                        $("#btnH0").css("background-color", "transparent");
+                        $("#btnH1").css("background-color", "transparent");
+                        $("#btnH2").css("background-color", "transparent");
+                        $("#btnH3").css("background-color", "transparent");
+                        $("#lblVoteR").html("<div class='alert alert-success'>نظر شما با موفقیت ثبت شد.</div>");
+                        setTimeout(function () { $("#btnVoteBack").click(); }, 2000);
+
+                    }
+                });
+            });
+            $("#step0d").click(function () {
+                $("#pnlResult").fadeOut(200, function () {
+                    $("#pnlParcel").fadeIn(200);
+                });
+            });
+            $("#trackshow").click(function () {
+                $("#pnlParcel").fadeOut(200, function () {
+                    $("#pnlResult").fadeIn(200);
+                });
+            });
+            $("#pnlParcel").fadeOut(0);
+            $("#divVote").fadeOut(0);
+            $("#txtbSearch").keyup(function (e) {
+                //alert(1);
+                if ($(this).val().length > 0) {
+                    $("#textcount").html($(this).val().length + "<span style=\"margin-right:2px;\">کاراکتر</span>");
+                }
+                else {
+                    $("#textcount").html("");
+                }
+            });
+            $("#pnlvotebtn").click(function () {
+                $("#txtVoteR").fadeOut();
+                $("#txtVoteT").fadeOut();
+                $("#btnVoteR").fadeOut();
+                $("#txtVoteR").hide();
+                $("#txtVoteT").hide();
+                $("#btnVoteR").hide();
+                $("#btnH0").css("background-color", "transparent");
+                $("#btnH1").css("background-color", "transparent");
+                $("#btnH2").css("background-color", "transparent");
+                $("#btnH3").css("background-color", "transparent");
+                $("#lblVoteR").html("");
+                $("#pnlParcel").fadeOut(0);
+                $("#pnlResult").fadeOut(0);
+                $("#divVote").fadeIn(200);
+            });
+            $("#btnVoteBack").click(function () {
+                $("#divVote").fadeOut(200, function () {
+                    $("#pnlResult").fadeIn(200);
+                });
+            });
+        }
+        $(document).ready(function () {
+            BindControlEvents();
+        });
+    </script>
+</head>
+<body style="background-color: transparent!important;">
+    <form method="post" action="https://tracking.post.ir/" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;btnSearch&#39;)" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="">
+
+
+
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="./سامانه رهگیری مرسولات پستی_files/WebResource.axd" type="text/javascript"></script>
+
+
+<script src="./سامانه رهگیری مرسولات پستی_files/ScriptResource.axd" type="text/javascript"></script>
+<script src="./سامانه رهگیری مرسولات پستی_files/ScriptResource(1).axd" type="text/javascript"></script>
+<script src="./سامانه رهگیری مرسولات پستی_files/WebResource(1).axd" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	
+	
+	
+</div>
+        <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('scripmanager1', 'form1', ['tpnlMain','pnlMain'], [], [], 90, '');
+//]]>
+</script>
+
+        <div id="updateProgress" style="display: none;" role="status" aria-hidden="true">
+	
+                <div style="position: fixed; text-align: center; height: 100%; width: 100%; top: 0; right: 0; left: 0; z-index: 9999999; background-color: white;">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="top: 10%; position: absolute;">
+                            <img src="./سامانه رهگیری مرسولات پستی_files/arm.png" style="width: 120px;" alt="لوگو"><br>
+                            <h4>سامانه در حال رهگیری می باشد لطفا صبر کنید ...
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            
+</div>
+        <div class="Header" style="display: none;">
+        </div>
+        <div class="pnellogo" style="margin-top: 0px; background-color: rgb(8, 49, 125);">
+            <div class="">
+                <div class="postlogo TopShow" style="width: 67%;"><img style="width:50px;" src="./سامانه رهگیری مرسولات پستی_files/postarmsitewhite.png"></div>
+                <div class="rahgiriicon TopShow" style="width: 60%;"><a href="http://www.post.ir/"><img src="./سامانه رهگیری مرسولات پستی_files/rahgirigicon-white0.png" style="margin-top:-10px;height:60px;"></a></div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div id="pnlMain">
+                        <div class="row">
+                            <div class="search-panel col-lg-6 col-md-8 col-xs-12 col-sm-8  col-lg-offset-3 col-md-offset-2 col-sm-offset-2 col-xs-offset-0" style="margin-top: -5px;">
+                                <h4>لطفا شماره مرسوله خود را وارد نمایید:</h4>
+                                <div style="position: relative">
+                                    <input name="txtbSearch" type="text" value="782960218300005520776111" maxlength="24" id="txtbSearch" class="form-control input-lg">
+                                    <a id="btnSearch" title="جستجو" class="form-control btn link" href="javascript:__doPostBack(&#39;btnSearch&#39;,&#39;&#39;)"></a>
+                                    <label id="textcount"></label>
+                                </div>
+                            </div>
+                            
+                            <div id="pnlResult" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 20px;"><div><div class="row"><div class="alert alert-warning">رهگیری مرسوله به شماره : 782960218300005520776111</div></div><div class="row"><div class="newtdheader col-lg-6 col-md-6 col-xs-12 col-sm-6">شنبه 1 مهر ماه 1402</div><div class="newtdheader col-lg-5 col-md-5 col-xs-12 col-sm-5">موقعیت</div><div class="newtdheader col-lg-1 col-md-1 col-xs-12 col-sm-1">ساعت</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">11</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">آماده سازی مرسوله جهت ارسال به كرمان،زرند،مرکز مبادله شهرستان زرند</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">15:59</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">10</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">ورود مرسوله به منطقه پستی كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی تائيد شد</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">08:26</div></div><div class="row"><div class="newtdheader col-lg-6 col-md-6 col-xs-12 col-sm-6">پنجشنبه 30 شهریور ماه 1402</div><div class="newtdheader col-lg-5 col-md-5 col-xs-12 col-sm-5">موقعیت</div><div class="newtdheader col-lg-1 col-md-1 col-xs-12 col-sm-1">ساعت</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">9</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">مرسوله به منطقه پستی كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی رهسپار شد.</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">18:54</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">8</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">بارگیری جهت ارسال به كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی انجام شد.</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">18:37</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">7</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">آماده سازی مرسوله جهت ارسال به كرمان،کرمان،مرکز مبادله شهید حاج قاسم سلیمانی</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">18:08</div></div><div class="row"><div class="newtdheader col-lg-6 col-md-6 col-xs-12 col-sm-6">چهارشنبه 29 شهریور ماه 1402</div><div class="newtdheader col-lg-5 col-md-5 col-xs-12 col-sm-5">موقعیت</div><div class="newtdheader col-lg-1 col-md-1 col-xs-12 col-sm-1">ساعت</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">6</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">ورود مرسوله از دفتر پستی به منطقه پستی تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">13:46</div></div><div class="row"><div class="newtdheader col-lg-6 col-md-6 col-xs-12 col-sm-6">سه‌شنبه 28 شهریور ماه 1402</div><div class="newtdheader col-lg-5 col-md-5 col-xs-12 col-sm-5">موقعیت</div><div class="newtdheader col-lg-1 col-md-1 col-xs-12 col-sm-1">ساعت</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">5</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">مرسوله به منطقه پستی تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران رهسپار شد.</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">گيلان،رشت،نقطه مبادله مرکزی (رشت-گلسار)</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">23:14</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">4</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">بارگیری جهت ارسال به تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران انجام شد.</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">گيلان،رشت،نقطه مبادله مرکزی (رشت-گلسار)</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">21:30</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">3</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">آماده سازی مرسوله جهت ارسال به تهران،مرکز تجزیه و مبادلات کشور،اداره کل تجزیه و مبادلات تهران</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">گيلان،رشت،نقطه مبادله مرکزی (رشت-گلسار)</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">19:57</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">2</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5"><span style="color:red;"> تحویل مرسوله به پست</span>، ورود مرسوله از دفتر پستی به منطقه پستی گيلان،رشت،نقطه مبادله مرکزی (رشت-گلسار)</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">گيلان،رشت،نقطه مبادله مرکزی (رشت-گلسار)</div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">19:57</div></div><div class="row newrowdata"><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">1</div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5">تولید بارکد پستی<a id="step0d" href="https://tracking.post.ir/#" style="color:orange;">(مشاهده جزئیات بیشتر)</a></div><div class="newtddata col-lg-5 col-md-5 col-xs-12 col-sm-5"></div><div class="newtddata col-lg-1 col-md-1 col-xs-12 col-sm-1" style="text-align:center">11:18</div></div></div></div>
+                            <div id="pnlParcel" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 20px; display: none;"><div class="row" style="margin-bottom:10px; margin-top:-10px;"><div class="col-lg-2 col-md-2 col-sm-3 col-xs-12"><div class="btn btn-primary text-center" style="width:100%" onclick="printParcelInfo();">چاپ رسید پستی</div></div><div class="col-lg-2 col-md-2 col-sm-3 col-xs-12"><div class="btn btn-info text-center" style="width:100%" id="trackshow">مشاهده رهگیری مرسوله</div></div></div><div id="pParcelInfo" class="newbox"><div class="row"><div class="col-lg-1 col-md-1 col-sm-3 col-xs-12"><img alt="Post" src="./سامانه رهگیری مرسولات پستی_files/postarm.png" width="50px" height="50px"></div><div class="col-lg-8 col-md-7 col-sm-6 col-xs-12"><div class="alert alert-warning">اطلاعات مرسوله به شماره: 782960218300005520776111</div></div><div class="col-lg-3 col-md-4 col-sm-3 col-xs-12" style="direction:ltr;font-size:12pt;padding-top:15px;">تاریخ و ساعت قبول: 1402/06/28 11:18:35</div></div><div class="row newrowdatacol" style="display:block!important;border-top:1px solid;"><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-3">محتویات مرسوله : </div><div class="newcoldata col-lg-9 col-md-9 col-sm-9 col-xs-9">تجهيزات پژشکي</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">نوع سرویس :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">پيشتاز</div><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">دفتر پستی مبداء:</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">دفتر پیشخوان  دولت   72331259</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">مبدا: </div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">استان گيلان شهر رشت</div><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">مقصد :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">استان كرمان شهر زرند</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">نام فرستنده :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">عزيزي</div><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">نام گیرنده :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">مهدي عربپور</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">وزن :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">383</div><div class="newcolheader col-lg-3 col-md-3 col-sm-3 col-xs-6">هزینه پستی :</div><div class="newcoldata col-lg-3 col-md-3 col-sm-3 col-xs-6">317,463 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:block;text-align:center;">جدول ریز هزینه پستی</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">کرايه پستي :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">217,000 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">کرايه پستي پس از تخفيف :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">217,000 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">غير استاندارد :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">54,250 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">تعهد غرامت اجباري :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">20,000 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">ماليات بر ارزش افزوده :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">26,213 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">حق السهم پست :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">291,250 ریال</div></div><div class="row newrowdatacol"><div class="newcolheader col-lg-6 col-md-6 col-sm-6 col-xs-6">هزينه پستي (با ماليات) :</div><div class="newcoldata col-lg-6 col-md-6 col-sm-6 col-xs-6">317,463 ریال</div></div></div></div>
+                            <div id="divVote" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center votepnl" style="padding-top: 20px; display: none;">
+                                <div class="row" style="text-align: center; width: 50%; margin: 0 auto; padding-bottom: 20px;" id="frmVote">
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-bottom: 20px;">
+                                        <h4>آیااز سرعت سیر مرسوله خود رضایت داشتید؟
+                                        </h4>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6">
+                                        <img src="./سامانه رهگیری مرسولات پستی_files/h0.png" id="btnH0" alt="عالی" style="cursor: pointer; background-color: transparent; padding: 10px;">
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6">
+                                        <img src="./سامانه رهگیری مرسولات پستی_files/h1.png" id="btnH1" alt="خوب" style="cursor: pointer; background-color: transparent; padding: 10px;">
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6">
+                                        <img src="./سامانه رهگیری مرسولات پستی_files/h2.png" id="btnH2" alt="متوسط" style="cursor: pointer; background-color: transparent; padding: 10px;">
+                                    </div>
+                                    <div class="col-lg-3 col-md-3 col-xs-12 col-sm-6">
+                                        <img src="./سامانه رهگیری مرسولات پستی_files/h3.png" id="btnH3" alt="ضعیف" style="cursor: pointer; background-color: transparent; padding: 10px;">
+                                    </div>
+                                    <div id="txtVoteR" class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-top: 20px;">
+                                        <div class="alert alert-success">امتیاز شما با موفقیت ثبت شد.</div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">دلیل شما برای این امتیاز</span>
+                                            <input name="txtVoteReason" type="text" maxlength="500" id="txtVoteReason" class="form-control" placeholder="اختیاری" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div id="txtVoteT" class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-top: 20px;">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">شماره تماس شما</span>
+                                            <input name="txtVoteTel" type="text" maxlength="50" id="txtVoteTel" class="form-control" placeholder="اختیاری" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div id="lblVoteR" class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-top: 20px;">
+                                    </div>
+                                    <div id="btnVoteR" class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-top: 20px;">
+                                        <div id="btnVoteSave" class="btn btn-success text-center" style="width: 200px">ثبت دلیل نظر شما</div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-12 col-xs-12 col-md-12 text-center" style="padding-top: 20px;">
+                                        <div id="btnVoteBack" class="btn btn-primary text-center" style="width: 200px">برگشت به رهگیری</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="votebtn" id="pnlvotebtn">
+                            <h4>نظر سنجی
+                            </h4>
+                        </div>
+                        <div class="bott-title">
+                            <h4>شرکت ملی پست جمهوری اسلامی ایران</h4>
+                            <h5>معاونت توسعه فناوری اطلاعات، امنیت شبکه و هوشمندسازی</h5>
+                            <h6>- اطلاعات مربوط به جابجایی مرسولات پستی بصورت لحظه ای در این سامانه ثبت می گردد</h6>
+                            <h6>- اطلاعات مربوط به مرسولات پستی حداکثر 6 ماه در این سامانه نگهداری و قابل رهگیری می باشد</h6>
+                            <h6 id="lbleop">- در صورت هرگونه ابهام ، سوال و نیاز به اطلاعات بیشتر با شماره تلفن 193 واحد ارتباط با مشتریان و در صورت ضرورت به ثبت شکایت به <a href="http://eop.post.ir/RegistExternalStep2.aspx?pc=782960218300005520776111">سامانه ثبت و پیگیری شکایت</a> شرکت ملی پست مراجعه فرمائید.</h6>
+                        
+			
+
+
+			</div>
+                    </div>
+            </div>
+        </div>
+        <div class="footer text-center">
+            <div class="container">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul>
+                        <li class="topfotter">
+                            <a href="http://post.ir/" target="_blank" class="alink">پرتال شرکت ملی پست</a>&nbsp;|&nbsp;
+                            <a href="http://ecard.post.ir/" target="_blank" class="alink">سفارش آنلاین کارت پستال</a>&nbsp;|&nbsp;
+                            <a href="https://mail.post.ir/" target="_blank" class="alink">سرویس پست الکترونیک</a>&nbsp;|&nbsp;
+                            <a href="http://stamp.post.ir/" target="_blank" class="alink">سفارش تمبر اختصاصی</a>&nbsp;|&nbsp;
+                            <a href="http://www.ebazaar-post.ir/" target="_blank" class="alink">بازار الکترونیک</a>
+                        </li>
+
+                    </ul>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <span>توسعه داده شده توسط اداره کل فناوری اطلاعات و هوشمندسازی شرکت ملی پست
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+WebForm_AutoFocus('txtbSearch');Sys.Application.add_init(function() {
+    $create(Sys.UI._UpdateProgress, {"associatedUpdatePanelId":"pnlMain","displayAfter":500,"dynamicLayout":true}, null, null, $get("updateProgress"));
+});
+//]]>
+</script>
+<span style="display: none !important;"><input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value=""></span><span style="display: none !important;"><input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value=""></span><span style="display: none !important;"><input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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"></span><span style="display: none !important;"><input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="BBBC20B8"></span><span style="display: none !important;"><input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="r4pyGSKQ0H5JYBNfE4KzUvS316TZVl38zrOB3qV30kKSr24CxhhbswQAqD1x0W6a/yiCKd4JqV26Z4CyBJfy44x/mJVeJvTtiCH78eD6i35f+b/Nwo7OMXuxIgOOOjS5IdJ5wVgxeHgF2zNySvALWKXHP4B7DXxE5GLh4pCShMCB3VZzfhiH+z0Npuboj5aP5MPvLuv4wQ0RiAQSPte2sw=="></span><span style="display: none !important;"><input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value=""></span></form>
+
+
+
+    <script lang="javascript" type="text/javascript" src="http://hit.post.ir/pjs.js"></script>
+    <script lang="javascript" type="text/javascript">
+        PostHC(2153);
+    </script>
+    <script type="text/javascript">
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+            BindControlEvents();
+        });
+        function printParcelInfo() {
+            var _d = document.getElementById('pParcelInfo');
+            var nw = window.open('', 'print-window');
+            nw.document.open();
+            nw.document.write('<html><head><link href="Components/bootstrap-3.3.5/css/bootstrap.min-jadid.css" rel="stylesheet" /><link href="Content/Fonts/Css/font-awesome.css" rel="stylesheet" /><link href="Content/Fonts/Css/fonts.css" rel="stylesheet" /><link href="Content/Site.css" rel="stylesheet" /><link href="Content/confirm.css" rel="stylesheet" /></head><body onload="window.print()">' + _d.innerHTML + '</body></html>');
+            nw.document.close();
+            setTimeout(function () { nw.close(); }, 10);
+        }
+        $("#pnlvotebtn").fadeOut(0);
+    </script>
+
+
+</body></html>

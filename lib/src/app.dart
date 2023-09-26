@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:post_tracking/src/ui/global/themes/themes.dart';
+import 'package:post_tracking/src/ui/pages/main_page/bloc/tracking_storage_bloc/tracking_storage_bloc.dart';
 import 'package:post_tracking/src/ui/pages/main_page/main_page.dart';
 
-import 'ui/pages/main_page/bloc/tracking_bloc.dart';
+import 'ui/pages/main_page/bloc/tracking_bloc/tracking_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,6 +16,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => TrackingBloc(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => TrackingStorageBloc(),
           lazy: false,
         ),
       ],
